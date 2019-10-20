@@ -9,7 +9,7 @@ using CQRS.Query.Repository.Response;
 using Logging.LambdaLogger;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using Pecuniary.ViewModels;
+using Pecuniary.Queries.Models;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]

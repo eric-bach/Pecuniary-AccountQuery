@@ -18,7 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CQRS.Query.Repository\CQRS.Query.Repository.csproj" />
     <ProjectReference Include="..\Logging.LambdaLogger\Logging.LambdaLogger.csproj" />
-    <ProjectReference Include="..\Pecuniary.ViewModels\Pecuniary.ViewModels.csproj" />
+    <ProjectReference Include="..\Pecuniary.Queries\Pecuniary.Queries.csproj" />
   </ItemGroup>
 
 </Project>

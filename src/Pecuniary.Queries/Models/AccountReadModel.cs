@@ -1,6 +1,5 @@
 ﻿using System;
 using Newtonsoft.Json;
-using Pecuniary.ViewModels;
 
 namespace Pecuniary.Queries.Models
 {
@@ -13,6 +12,16 @@ namespace Pecuniary.Queries.Models
     public class AccountSource : ViewModel
     {
         public AccountViewModel Account { get; set; }
+    }
+
+    /// <summary>
+    /// This has to match AccountViewModel in Pecuniary.ViewModels
+    /// </summary>
+    public class AccountViewModel
+    {
+        public string Name { get; set; }
+
+        public string AccountTypeCode { get; set; }
     }
 
     public class ViewModel
