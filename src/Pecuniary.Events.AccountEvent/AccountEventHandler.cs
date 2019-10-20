@@ -6,7 +6,7 @@ using Amazon.Lambda.Core;
 using Amazon.Lambda.SNSEvents;
 using CQRS.Query.Repository;
 using CQRS.Query.Repository.Response;
-using Logging.LambdaLogger;
+using EricBach.LambdaLogger;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Pecuniary.Queries.Models;

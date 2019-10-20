@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using CQRS.Query.Repository;
-using Logging.LambdaLogger;
+using EricBach.LambdaLogger;
 using MediatR;
 using Newtonsoft.Json;
 using Pecuniary.Queries.Account;
