@@ -1,0 +1,75 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Pecuniary AccountQuery
+
+Parameters:
+  AppName:
+    Description: Application name
+    Type: String
+    Default: Pecuniary
+  PecuniaryStackParameter:
+    Type: String
+    Default: pecuniary-stack
+  
+Globals:
+  Function:
+    Timeout: 30
+
+Resources:
+  AccountEvent:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: pecuniary-AccountEvent
+      Handler: Pecuniary.Events.AccountEvent::Pecuniary.Events.AccountEvent.Function::AccountEventHandlerAsync
+      Runtime: dotnetcore2.1
+      CodeUri: src/Pecuniary.Events.AccountEvent/bin/Debug/netcoreapp2.1/publish
+      MemorySize: 384
+      ReservedConcurrentExecutions: 1
+      Environment:
+        Variables:
+          ElasticSearchDomain:
+            Fn::ImportValue:
+              !Sub ${PecuniaryStackParameter}-PecuniaryElasticSearchDomain
+      Events:
+        AccountCreatedEventTopic:
+          Type: SNS
+          Properties:
+            # Use this instead of !GetAtt AccountCreatedEventTopic.Arn so we can prefix with developer initials
+            #Topic: !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:pecuniary-AccountCreatedEventTopic
+            Topic:
+              Fn::ImportValue:
+                !Sub ${PecuniaryStackParameter}-AccountCreatedEventTopicArn
+        AccountUpdatedEventTopic:
+          Type: SNS
+          Properties:
+            # Use this instead of !GetAtt AccountUpdatedEventTopic.Arn so we can prefix with developer initials
+            #Topic: !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:pecuniary-AccountUpdatedEventTopic
+            Topic:
+              Fn::ImportValue:
+                !Sub ${PecuniaryStackParameter}-AccountUpdatedEventTopicArn
+      Policies: 
+        - AmazonSNSReadOnlyAccess
+      Tags:
+        AppName: !Ref AppName 
+
+  QueryAccountWebApi:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: pecuniary-AccountQuery
+      Handler: Pecuniary.WebApi.AccountQuery::Pecuniary.WebApi.AccountQuery.LambdaEntryPoint::FunctionHandlerAsync
+      Runtime: dotnetcore2.1
+      CodeUri: src/Pecuniary.WebApi.AccountQuery/bin/Debug/netcoreapp2.1/publish
+      MemorySize: 384
+      Environment:
+        Variables:
+          ElasticSearchDomain:
+            Fn::ImportValue:
+              !Sub ${PecuniaryStackParameter}-PecuniaryElasticSearchDomain
+      Events:
+        GetValues:
+          Type: Api
+          Properties:
+            Path: /api/account/{id}
+            Method: GET
+      Tags:
+         AppName: !Ref AppName

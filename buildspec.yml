@@ -1,0 +1,36 @@
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - dotnet restore src/Pecuniary.EventService/Pecuniary.EventService.csproj
+
+      # Account Service
+      - dotnet restore src/Pecuniary.Events.AccountEvent/Pecuniary.Events.AccountEvent.csproj
+      - dotnet restore src/Pecuniary.WebApi.AccountCommand/Pecuniary.WebApi.AccountCommand.csproj
+      - dotnet restore src/Pecuniary.WebApi.AccountQuery/Pecuniary.WebApi.AccountQuery.csproj
+  build:
+    commands:
+      - dotnet publish src/Pecuniary.EventService/Pecuniary.EventService.csproj
+
+      # Account Service
+      - dotnet publish src/Pecuniary.Events.AccountEvent/Pecuniary.Events.AccountEvent.csproj
+      - dotnet publish src/Pecuniary.WebApi.AccountCommand/Pecuniary.WebApi.AccountCommand.csproj
+      - dotnet publish src/Pecuniary.WebApi.AccountQuery/Pecuniary.WebApi.AccountQuery.csproj
+  post_build:
+    commands:
+      #- dotnet vstest test/Ama.Rewards.Loyalty.WebApi.Balance.Tests/bin/Debug/netcoreapp2.1/publish/Ama.Rewards.Loyalty.WebApi.Balance.Tests.dll
+
+      - aws cloudformation package --template-file samTemplate.yaml --s3-bucket codepipeline-pecuniary-115499684434-us-west-2 --output-template-file outputSamTemplate.yaml
+artifacts:
+  files:
+    - samTemplate.yaml
+    - outputSamTemplate.yaml
+    - stage.json
+
+    # CQRS
+    - src/Pecuniary.EventService/bin/**/*
+
+    # Account Service
+    - src/Pecuniary.Events.AccountEvent/bin/**/*
+    - src/Pecuniary.WebApi.AccountCommand/bin/**/*
+    - src/Pecuniary.WebApi.AccountQuery/bin/**/*
