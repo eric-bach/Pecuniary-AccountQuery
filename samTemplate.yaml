@@ -29,30 +29,26 @@ Resources:
         Variables:
           ElasticSearchDomain:
             Fn::ImportValue:
-              !Sub ${PecuniaryStackParameter}-PecuniaryElasticSearchDomain
+              !Sub ${PecuniaryStackParameter}-PecuniaryESReadStoreDomain
       Events:
         AccountCreatedEventTopic:
           Type: SNS
           Properties:
-            # Use this instead of !GetAtt AccountCreatedEventTopic.Arn so we can prefix with developer initials
-            #Topic: !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:pecuniary-AccountCreatedEventTopic
             Topic:
               Fn::ImportValue:
-                !Sub ${PecuniaryStackParameter}-AccountCreatedEventTopicArn
+                !Sub ${PecuniaryStackParameter}-PecuniaryAccountCreatedEventTopicArn
         AccountUpdatedEventTopic:
           Type: SNS
           Properties:
-            # Use this instead of !GetAtt AccountUpdatedEventTopic.Arn so we can prefix with developer initials
-            #Topic: !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:pecuniary-AccountUpdatedEventTopic
             Topic:
               Fn::ImportValue:
-                !Sub ${PecuniaryStackParameter}-AccountUpdatedEventTopicArn
+                !Sub ${PecuniaryStackParameter}-PecuniaryAccountUpdatedEventTopicArn
       Policies: 
         - AmazonSNSReadOnlyAccess
       Tags:
         AppName: !Ref AppName 
 
-  QueryAccountWebApi:
+  AccountQueryWebApi:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: pecuniary-AccountQuery
@@ -64,7 +60,7 @@ Resources:
         Variables:
           ElasticSearchDomain:
             Fn::ImportValue:
-              !Sub ${PecuniaryStackParameter}-PecuniaryElasticSearchDomain
+              !Sub ${PecuniaryStackParameter}-PecuniaryESReadStoreDomain
       Events:
         GetValues:
           Type: Api

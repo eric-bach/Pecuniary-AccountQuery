@@ -3,10 +3,10 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - dotnet restore src/Pecuniary.EventService/Pecuniary.EventService.csproj
+      #- dotnet restore src/Pecuniary.EventService/Pecuniary.EventService.csproj
   build:
     commands:
-      - dotnet publish src/Pecuniary.EventService/Pecuniary.EventService.csproj
+      #- dotnet publish src/Pecuniary.EventService/Pecuniary.EventService.csproj
   post_build:
     commands:
       #- dotnet test test-integration/Ama.Rewards.Loyalty.WebApi.Trans.Integration.Tests/Ama.Rewards.Loyalty.WebApi.Trans.Integration.Tests.csproj --no-build
