@@ -2,12 +2,12 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - dotnet restore src/Pecuniary.Events.AccountEvent/Pecuniary.Events.AccountEvent.csproj
-      - dotnet restore src/Pecuniary.WebApi.AccountQuery/Pecuniary.WebApi.AccountQuery.csproj
+      - dotnet restore src/Pecuniary.Account.Events/Pecuniary.Account.Events.csproj
+      - dotnet restore src/Pecuniary.Account.Query/Pecuniary.Account.Query.csproj
   build:
     commands:
-      - dotnet publish src/Pecuniary.Events.AccountEvent/Pecuniary.Events.AccountEvent.csproj
-      - dotnet publish src/Pecuniary.WebApi.AccountQuery/Pecuniary.WebApi.AccountQuery.csproj
+      - dotnet publish src/Pecuniary.Account.Events/Pecuniary.Account.Events.csproj
+      - dotnet publish src/Pecuniary.Account.Query/Pecuniary.Account.Query.csproj
   post_build:
     commands:
       #- dotnet vstest test/Ama.Rewards.Loyalty.WebApi.Balance.Tests/bin/Debug/netcoreapp2.1/publish/Ama.Rewards.Loyalty.WebApi.Balance.Tests.dll
@@ -20,5 +20,5 @@ artifacts:
     - stage.json
     #- prod.json
 
-    - src/Pecuniary.Events.AccountEvent/bin/**/*
-    - src/Pecuniary.WebApi.AccountQuery/bin/**/*
+    - src/Pecuniary.Account.Events/bin/**/*
+    - src/Pecuniary.Account.Query/bin/**/*

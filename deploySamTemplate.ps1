@@ -49,13 +49,13 @@ else
 {
     Write-Host "`n`nPrebuild:"
     
-    dotnet restore src/Pecuniary.Events.AccountEvent/Pecuniary.Events.AccountEvent.csproj
-    dotnet restore src/Pecuniary.WebApi.AccountQuery/Pecuniary.WebApi.AccountQuery.csproj
+    dotnet restore src/Pecuniary.Account.Events/Pecuniary.Account.Events.csproj
+    dotnet restore src/Pecuniary.Account.Query/Pecuniary.Account.Query.csproj
     
     Write-Host "`n`nBuild:"
     
-    dotnet publish src/Pecuniary.Events.AccountEvent/Pecuniary.Events.AccountEvent.csproj
-    dotnet publish src/Pecuniary.WebApi.AccountQuery/Pecuniary.WebApi.AccountQuery.csproj
+    dotnet publish src/Pecuniary.Account.Events/Pecuniary.Account.Events.csproj
+    dotnet publish src/Pecuniary.Account.Query/Pecuniary.Account.Query.csproj
 }
   
 Write-Host "`n`nDeploy:"

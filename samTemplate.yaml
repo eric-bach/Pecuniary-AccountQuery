@@ -45,9 +45,9 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: pecuniary-AccountEvent
-      Handler: Pecuniary.Events.AccountEvent::Pecuniary.Events.AccountEvent.Function::AccountEventHandlerAsync
+      Handler: Pecuniary.Account.Events::Pecuniary.Account.Events.Function::AccountEventHandlerAsync
       Runtime: dotnetcore2.1
-      CodeUri: src/Pecuniary.Events.AccountEvent/bin/Debug/netcoreapp2.1/publish
+      CodeUri: src/Pecuniary.Account.Events/bin/Debug/netcoreapp2.1/publish
       MemorySize: 384
       ReservedConcurrentExecutions: 1
       Environment:
@@ -77,9 +77,9 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: pecuniary-AccountQuery
-      Handler: Pecuniary.WebApi.AccountQuery::Pecuniary.WebApi.AccountQuery.LambdaEntryPoint::FunctionHandlerAsync
+      Handler: Pecuniary.Account.Query::Pecuniary.Account.Query.LambdaEntryPoint::FunctionHandlerAsync
       Runtime: dotnetcore2.1
-      CodeUri: src/Pecuniary.WebApi.AccountQuery/bin/Debug/netcoreapp2.1/publish
+      CodeUri: src/Pecuniary.Account.Query/bin/Debug/netcoreapp2.1/publish
       MemorySize: 384
       Environment:
         Variables:
