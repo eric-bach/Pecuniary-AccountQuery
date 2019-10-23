@@ -47,7 +47,7 @@ Resources:
       FunctionName: pecuniary-AccountEvent
       Handler: Pecuniary.Account.Events::Pecuniary.Account.Events.Function::AccountEventHandlerAsync
       Runtime: dotnetcore2.1
-      CodeUri: src/Pecuniary.Account.Events/bin/Debug/netcoreapp2.1/publish
+      CodeUri: Pecuniary.Account.Events/bin/Debug/netcoreapp2.1/publish
       MemorySize: 384
       ReservedConcurrentExecutions: 1
       Environment:
@@ -79,7 +79,7 @@ Resources:
       FunctionName: pecuniary-AccountQuery
       Handler: Pecuniary.Account.Query::Pecuniary.Account.Query.LambdaEntryPoint::FunctionHandlerAsync
       Runtime: dotnetcore2.1
-      CodeUri: src/Pecuniary.Account.Query/bin/Debug/netcoreapp2.1/publish
+      CodeUri: Pecuniary.Account.Query/bin/Debug/netcoreapp2.1/publish
       MemorySize: 384
       Environment:
         Variables:
@@ -97,3 +97,10 @@ Resources:
               Authorizer: CognitoAuthorizer
       Tags:
          AppName: !Ref AppName
+
+Outputs:
+  PecuniaryApiGatewayBaseUrl:
+    Description: Base Url of the Pecuniary API Gateway
+    Value: !Ref PecuniaryWebApi
+    Export:
+      Name: !Sub ${AWS::StackName}-PecuniaryApiGatewayBaseUrl

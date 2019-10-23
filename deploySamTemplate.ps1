@@ -49,13 +49,13 @@ else
 {
     Write-Host "`n`nPrebuild:"
     
-    dotnet restore src/Pecuniary.Account.Events/Pecuniary.Account.Events.csproj
-    dotnet restore src/Pecuniary.Account.Query/Pecuniary.Account.Query.csproj
+    dotnet restore Pecuniary.Account.Events/Pecuniary.Account.Events.csproj
+    dotnet restore Pecuniary.Account.Query/Pecuniary.Account.Query.csproj
     
     Write-Host "`n`nBuild:"
     
-    dotnet publish src/Pecuniary.Account.Events/Pecuniary.Account.Events.csproj
-    dotnet publish src/Pecuniary.Account.Query/Pecuniary.Account.Query.csproj
+    dotnet publish Pecuniary.Account.Events/Pecuniary.Account.Events.csproj
+    dotnet publish Pecuniary.Account.Query/Pecuniary.Account.Query.csproj
 }
   
 Write-Host "`n`nDeploy:"
@@ -66,5 +66,18 @@ dotnet-lambda deploy-serverless `
     --region us-west-2 `
     --s3-prefix $developerPrefix- `
     --s3-bucket pecuniary-deployment-artifacts
+
+# Get the API Gateway Base URL
+$stack = aws cloudformation describe-stacks --stack-name $developerPrefix-pecuniary-accountquery-stack | ConvertFrom-Json
+$outputKey = $stack.Stacks.Outputs.OutputKey.IndexOf("PecuniaryApiGatewayBaseUrl")
+$apiGatewayBaseUrl = $stack.Stacks.Outputs[$outputKey].OutputValue
+
+# Add scopes
+Write-Host "`n`Adding Scopes to $apiGatewayBaseUrl"
+aws lambda invoke `
+    --function-name "$developerPrefix-pecuniary-AddScopes" `
+    --payload """{ """"ApiGatewayBaseUrl"""": """"$apiGatewayBaseUrl"""" }""" `
+    outfile.json
+Remove-Item outfile.json
 
 Write-Host "`n`n YOUR STACK NAME IS:   $developerPrefix-pecuniary-accountquery-stack   `n`n"

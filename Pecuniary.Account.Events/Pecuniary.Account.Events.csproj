@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <AWSProjectType>Lambda</AWSProjectType>
-    <RootNamespace>Pecuniary.Events.AccountEvent</RootNamespace>
+    <RootNamespace>Pecuniary.Account.Events</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
