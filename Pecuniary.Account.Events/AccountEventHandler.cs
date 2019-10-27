@@ -18,6 +18,7 @@ namespace Pecuniary.Account.Events
 {
     public class Function
     {
+        private static readonly string ElasticSearchDomain = Environment.GetEnvironmentVariable("ElasticSearchDomain");
         private readonly AccountQueryService _accountQueryService;
 
         public Function()
@@ -38,19 +39,14 @@ namespace Pecuniary.Account.Events
         {
             Logger.Log($"Received {message.Records.Count} records");
 
-            var elasticSearchDomain = Environment.GetEnvironmentVariable("ElasticSearchDomain");
-            Logger.Log("Found ElasticSearchDomain");
-
             foreach (var record in message.Records)
             {
                 Logger.Log($"Received message {record.Sns.Message}");
 
-                // Denormalize event based on EventType
-                //dynamic obj = DeserializeMessage(record.Sns.Message);
-
+                Logger.Log("Adding Account document");
                 var response = await _accountQueryService.AddOrUpdateAsync(record.Sns.Message);
 
-                Logger.Log($"Result: {response.Result}");
+                Logger.Log($"Add Account Result: {response.Result}");
             }
 
             Logger.Log($"Completed processing {message.Records.Count} records");
@@ -67,6 +63,8 @@ namespace Pecuniary.Account.Events
 
             public async Task<ElasticSearchResponse> AddOrUpdateAsync(string message)
             {
+                Logger.Log("Adding document to ElasticSearch");
+                
                 // Get the event name from the message
                 var eventName = Regex.Matches(message, @"EventName"":[\s]*""([a-zA-Z)]+)").First().Groups.Last().Value;
                 Logger.Log($"Event Name: {eventName}");
@@ -75,13 +73,12 @@ namespace Pecuniary.Account.Events
                 dynamic request = JsonConvert.DeserializeObject(message, Type.GetType(eventName));
                 Logger.Log($"Event Id: {request.Id}");
 
-                // Get the domain model name by parsing the first word in the event name
-                var model = Regex.Matches(eventName, @"([A-Z][a-z]+)").Select(m => m.Value).First().ToLower();
-                Logger.Log($"Event Model: {model}");
+                // Use the domain model name (by parsing the first word in the event name) as the index
+                var index = Regex.Matches(eventName, @"([A-Z][a-z]+)").Select(m => m.Value).First().ToLower();
+                Logger.Log($"Event Index: {index}");
 
-                Logger.Log($"Sending event to ElasticSearch");
-
-                return await _repository.AddOrUpdateAsync(message, model, request.Id.ToString());
+                Logger.Log($"Sending document {request.Id} to ElasticSearch {ElasticSearchDomain}");
+                return await _repository.AddAsync(ElasticSearchDomain, index, request.Id.ToString(), message);
             }
         }
     }
