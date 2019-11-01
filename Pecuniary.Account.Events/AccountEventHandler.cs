@@ -18,7 +18,6 @@ namespace Pecuniary.Account.Events
 {
     public class Function
     {
-        private static readonly string ElasticSearchDomain = Environment.GetEnvironmentVariable("ElasticSearchDomain");
         private readonly AccountQueryService _accountQueryService;
 
         public Function()
@@ -31,7 +30,8 @@ namespace Pecuniary.Account.Events
 
         private static void ConfigureServices(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddScoped<IReadRepository<AccountViewModel>, ElasticSearchRepository<AccountViewModel>>();
+            serviceCollection.AddScoped<IReadRepository<AccountViewModel>>(r =>
+                new ElasticSearchRepository<AccountViewModel>(Environment.GetEnvironmentVariable("ElasticSearchDomain")));
             serviceCollection.AddScoped<AccountQueryService>();
         }
 
@@ -44,7 +44,8 @@ namespace Pecuniary.Account.Events
                 Logger.Log($"Received message {record.Sns.Message}");
 
                 Logger.Log("Adding Account document");
-                var response = await _accountQueryService.AddOrUpdateAsync(record.Sns.Message);
+
+                var response = await _accountQueryService.AddAsync(record.Sns.Message);
 
                 Logger.Log($"Add Account Result: {response.Result}");
             }
@@ -61,7 +62,7 @@ namespace Pecuniary.Account.Events
                 _repository = repository;
             }
 
-            public async Task<ElasticSearchResponse> AddOrUpdateAsync(string message)
+            public async Task<ElasticSearchResponse> AddAsync(string message)
             {
                 Logger.Log("Adding document to ElasticSearch");
                 
@@ -77,8 +78,8 @@ namespace Pecuniary.Account.Events
                 var index = Regex.Matches(eventName, @"([A-Z][a-z]+)").Select(m => m.Value).First().ToLower();
                 Logger.Log($"Event Index: {index}");
 
-                Logger.Log($"Sending document {request.Id} to ElasticSearch {ElasticSearchDomain}");
-                return await _repository.AddAsync(ElasticSearchDomain, index, request.Id.ToString(), message);
+                Logger.Log($"Sending document {request.Id} to ElasticSearch");
+                return await _repository.AddAsync(index, request.Id.ToString(), message);
             }
         }
     }
