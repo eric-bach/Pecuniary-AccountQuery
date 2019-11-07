@@ -47,7 +47,7 @@ Resources:
       FunctionName: pecuniary-AccountEvent
       Handler: Pecuniary.Account.Events::Pecuniary.Account.Events.Function::AccountEventHandlerAsync
       Runtime: dotnetcore2.1
-      CodeUri: Pecuniary.Account.Events/bin/Debug/netcoreapp2.1/publish
+      CodeUri: Pecuniary.Account.Events/bin/Release/netcoreapp2.1/publish
       MemorySize: 384
       ReservedConcurrentExecutions: 1
       Environment:
