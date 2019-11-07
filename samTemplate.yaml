@@ -79,7 +79,7 @@ Resources:
       FunctionName: pecuniary-AccountQuery
       Handler: Pecuniary.Account.Query::Pecuniary.Account.Query.LambdaEntryPoint::FunctionHandlerAsync
       Runtime: dotnetcore2.1
-      CodeUri: Pecuniary.Account.Query/bin/Debug/netcoreapp2.1/publish
+      CodeUri: Pecuniary.Account.Query/bin/Release/netcoreapp2.1/publish
       MemorySize: 384
       Environment:
         Variables:
